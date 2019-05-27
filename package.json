@@ -1,7 +1,7 @@
 {
-  "name": "expresstube",
+  "name": "dmdd-mongodb",
   "version": "1.0.0",
-  "description": "Express server for Spotitube",
+  "description": "MongoDB app for DMDD research casus",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -9,8 +9,8 @@
   "author": "Koen van Helvoort",
   "license": "ISC",
   "dependencies": {
-    "body-parser": "^1.18.3",
+    "cors": "^2.8.5",
     "express": "^4.16.4",
-    "mongodb": "^3.1.13"
+    "mongoose": "^5.5.8"
   }
 }

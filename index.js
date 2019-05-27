@@ -1,22 +1,68 @@
 const express = require('express')
+const cors = require('cors')
+
+const mongoose = require('./src/models')
+
 const app = express()
-const bodyParser = require('body-parser')
 
-const mongoClient = require('mongodb').MongoClient
+const givenQueries = require('./src/routes/givenQueries')
 
-const userRoute = require('./routes/users')
+app.use(cors())
 
-const mongoURI = 'mongodb+srv://dbUser:dbPassword@spotitube-vdky5.azure.mongodb.net/test?retryWrites=true'
-let db
+app.use('/given', givenQueries)
 
-app.use(bodyParser.json())
+const eraseDatabaseOnSync = true
 
-app.use('/users', userRoute)
+mongoose.connectDb().then(async () => {
+  if (eraseDatabaseOnSync) {
+    await Promise.all([
+      mongoose.models.Member.deleteMany({}),
+      mongoose.models.Concert.deleteMany({}),
+      mongoose.models.Work.deleteMany({})
+    ])
 
-mongoClient.connect(mongoURI, { useNewUrlParser: true }, (err, client) => {
-    if (err) return console.log(err)
-    db = client.db('Spotitube')
-    app.listen(3000, function () {
-        console.log('listening on port 3000')
-    })
+    createMembers()
+  }
+  app.listen(3000, () => console.log(`Example app listening on port 3000!`))
 })
+
+const createMembers = async () => {
+  const member1 = new mongoose.models.Member({
+    memberNo: 1,
+    rangeName: 'Hoog',
+    townName: 'Uden',
+    surname: 'Helvoort',
+    initials: 'KWJ',
+    homeHouseNo: 18,
+    email: 'K@h.c',
+    choir: [
+      {
+        choirName: 'BZB',
+        role: 'MEMBER'
+      }
+    ]
+  })
+
+  const member2 = new mongoose.models.Member({
+    memberNo: 2,
+    rangeName: 'Hoog',
+    townName: 'Uden',
+    surname: 'Fransen',
+    initials: 'AL',
+    homeHouseNo: 85,
+    email: 'K@h.c',
+    choir: [
+      {
+        choirName: 'BLOG',
+        role: 'MEMBER'
+      },
+      {
+        choirName: 'BZB',
+        role: 'CONDUCTOR'
+      }
+    ]
+  })
+
+  await member1.save()
+  await member2.save()
+}
