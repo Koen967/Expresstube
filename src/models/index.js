@@ -1,15 +1,14 @@
 const mongoose = require('mongoose')
 
-const Member = require('./member').Member
-const Concert = require('./concert').Concert
-const Work = require('./work').Work
+const Playlist = require('./playlist').Playlist
+const Track = require('./track').Track
 
 const connectDb = () => {
-  return mongoose.connect(`mongodb://localhost:27017/AmateurMusicians`, {
+  return mongoose.connect(`mongodb://localhost:27017/Spotitube`, {
     useNewUrlParser: true
   })
 }
 
-const models = { Member, Concert, Work }
+const models = { Playlist, Track }
 
 module.exports = { connectDb, models }
